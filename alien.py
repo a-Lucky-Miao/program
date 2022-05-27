@@ -13,22 +13,14 @@ class Aline(Sprite):
         # 加载外星人图像并设置其rect属性
         self.image = pygame.image.load('program/images/alien.bmp')
         self.rect = self.image.get_rect()
-        # 每个外星人初始在屏幕左上角附近
-        # self.rect.x = self.rect.width
-        # self.rect.y = self.rect.height
-
+        # 每个外星人初始在屏幕右下角附近
         self.rect.x = 1400
         self.rect.y = 800
 
-        # 储存外星人精准的水平位置
-        # self.x = float(self.rect.x)
+        # 储存外星人精准的垂直位置
         self.y = float(self.rect.y)
 
     def update(self):
-        """向左右移动"""
-        # self.x += (self.settings.alien_speed *
-        #            self.settings.fleet_direction)
-        # self.rect.x = self.x
         """上下移动"""
         self.y -= (self.settings.alien_speed * self.settings.fleet_direction)
         self.rect.y = self.y

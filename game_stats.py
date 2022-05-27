@@ -8,6 +8,7 @@ class GameStats:
         # 读取最高分
         with open('program/high_score.txt', 'r') as high_score:
             highscore = high_score.read()
+        # 如果为空则设为0
         if highscore == "":
             self.high_score = 0
         else:

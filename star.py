@@ -3,8 +3,7 @@ from pygame.sprite import Sprite
 
 
 class Star(Sprite):
-    """管理星星类"""
-
+    """背景星星图片"""
     def __init__(self, ai_game):
         """初始化星星"""
         super().__init__()

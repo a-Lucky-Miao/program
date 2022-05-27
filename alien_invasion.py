@@ -17,9 +17,10 @@ class AlienInvasion:
 
     def __init__(self):
         """初始化游戏并创建游戏"""
-        # 创建游戏显示
+        # 初始化模块
         pygame.init()
         self.settings = Setting()
+        # 创建一个surface对象窗口
         self.screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
         self.settings.screen_width = self.screen.get_rect().width
         self.settings.screen_height = self.screen.get_rect().height
@@ -52,16 +53,14 @@ class AlienInvasion:
         """屏幕更新"""
         # 每次循环时都重新绘制屏幕
         self.screen.fill(self.settings.bg_color)
-
         # 绘画星星背景
         self.stars.draw(self.screen)
-
+        # 绘画飞船
         self.ship.blitme()
-
+        # 绘画子弹
         for bullet in self.bullets.sprites():
             """更新屏幕上的图像,并切换到新屏幕"""
             bullet.draw_bullet()
-
         # 绘画外星人
         self.aliens.draw(self.screen)
         # 显示游戏分数
@@ -90,12 +89,6 @@ class AlienInvasion:
 
     def _check_keydown_events(self, event):
         """按下按钮事件"""
-        # # 按右键飞船向右设为Ture
-        # if event.key == pygame.K_RIGHT:
-        #     self.ship.moving_right = True
-        # # 按左键飞船向左设为Ture
-        # elif event.key == pygame.K_LEFT:
-        #     self.ship.moving_left = Tru
         # 按上键飞船向上设为Ture
         if event.key == pygame.K_UP:
             self.ship.moving_up = True
@@ -111,13 +104,6 @@ class AlienInvasion:
 
     def _check_keyup_events(self, event):
         """抬起按钮事件"""
-        # 抬起右键飞船向右设为False
-        # if event.key == pygame.K_RIGHT:
-        #     self.ship.moving_right = False
-        # # 抬起左键飞船向左设为False
-        # elif event.key == pygame.K_LEFT:
-        #     self.ship.moving_left = False
-
         if event.key == pygame.K_UP:
             self.ship.moving_up = False
         elif event.key == pygame.K_DOWN:
@@ -137,9 +123,6 @@ class AlienInvasion:
         self.bullets.update()
         # 删除消失子弹
         for bullet in self.bullets.copy():
-            # 顶部碰撞
-            # if bullet.rect.left <= 0:
-            #     self.bullets.remove(bullet)
             # 右部碰撞
             if bullet.rect.left >= self.settings.screen_width:
                 self.bullets.remove(bullet)
@@ -174,63 +157,40 @@ class AlienInvasion:
     def _create_fleet(self):
         """创建外星人群"""
         # 创建一个外星人
-        # alien = Aline(self)
-        # alien_width, alien_height = alien.rect.size
-        # ship_height = self.ship.rect.height
-        # # 定义外星人群行与列
-        # available_space_x = self.settings.screen_width - (2 * alien_width)
-        # number_aliens_x = available_space_x // (2 * alien_width)
-        # available_space_y = (self.settings.screen_height - (3 * alien_height) - ship_height)
-        # number_rows = available_space_y // (2 * alien_height)
-
-        # 创建一组外星人
-        # for row_number in range(number_rows):
-        #     for alien_number in range(number_aliens_x):
-        #         # 创建一个外星人并将其加入当前行
-        #         self._create_aline(alien_number, row_number)
-
         alien = Aline(self)
         alien_width, alien_height = alien.rect.size
+        # 定义外星人群行与列
         available_space_y = self.settings.screen_height - (2 * alien_height)
         number_aliens_y = available_space_y // (2 * alien_height)
-
         ship_width = self.ship.rect.width
         available_space_x = (self.settings.screen_width - (3 * alien_width) +
                              ship_width)
         number_rows = available_space_x // (2 * alien_width)
 
+        # 创建一组外星人
         for row_number in range(number_rows):
             for alien_number in range(number_aliens_y):
                 self._create_aline(alien_number, row_number)
 
     def _create_aline(self, alien_number, row_number):
         """创建一个外星人并将其加入当前行"""
-        # alien = Aline(self)
-        # alien_width, alien_height = alien.rect.size
-        # alien.x = alien_width + 2 * alien_width * alien_number
-        # alien.rect.x = alien.x
-        # alien.rect.y = alien_height + 2 * alien.rect.height * row_number
-        # # 将外星人并将其加入当前外星人行
-        # self.aliens.add(alien)
-
         alien = Aline(self)
         alien_width, alien_height = alien.rect.size
         alien.y = alien_height + 2 * alien_height * alien_number
         alien.rect.y = alien.y
         alien.rect.x = self.settings.screen_width - 2 * alien_width * row_number
+        # 将外星人并将其加入当前外星人列
         self.aliens.add(alien)
 
     def _update_aliens(self):
         """更新外星人群中所有外星人位置"""
         # 检测外星人是否左右碰撞
         self._check_fleet_edges()
-        # 外星人左右碰撞
+        # 外星人更新
         self.aliens.update()
-
         # 判断外星人是否与飞船碰撞
         if pygame.sprite.spritecollideany(self.ship, self.aliens):
             self._ship_hit()
-
         # 判断外星人是否下边框碰撞
         self._check_aliens_bottom()
 
